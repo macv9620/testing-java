@@ -20,7 +20,10 @@ public class MovieRepositoryJdbc implements MovieRepository {
 
     @Override
     public Movie findById(long id) {
-        return null;
+
+        Object[] args = { id };
+
+        return jdbcTemplate.queryForObject("SELECT * FROM movies WHERE id = ?", args, movieMapper);
     }
 
     @Override
@@ -31,7 +34,7 @@ public class MovieRepositoryJdbc implements MovieRepository {
 
     @Override
     public void saveOrUpdate(Movie movie) {
-
+        jdbcTemplate.update("INSERT INTO movies (name, minutes, genre) values (?, ?, ?)", movie.getName(), movie.getMinutes(), movie.getGenre().toString());
     }
 
     private static final RowMapper<Movie> movieMapper = (rs, rowNum) -> new Movie(
